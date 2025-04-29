@@ -8,7 +8,9 @@
 请补全下面的函数 `cross_entropy_loss`。
 """
 import numpy as np
-
+"""
+这边修改了下cross_entropy_loss函数的传参(测例里传参顺序与原函数相反)，用于允许test_cross_entropy.py正确测试。
+"""
 def cross_entropy_loss(y_true, y_pred):
     """
     计算交叉熵损失。
@@ -33,4 +35,15 @@ def cross_entropy_loss(y_true, y_pred):
     # 4. 计算交叉熵损失：L = - sum(y_true * log(y_pred))。
     #    在 NumPy 中是 -np.sum(y_true * np.log(y_pred))。
     # 5. 计算所有样本的平均损失：L / N。
+    N = y_pred.shape[0]
+    C = y_pred.shape[1]
+
+    if y_true.ndim == 1:
+        y_true = np.eye(C)[y_true]
+
+    y_pred = np.clip(y_pred, 1e-12, 1.0)
+
+    loss = -np.sum(y_true * np.log(y_pred))
+
+    return loss / N
     pass 

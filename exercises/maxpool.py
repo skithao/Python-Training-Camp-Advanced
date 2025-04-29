@@ -8,7 +8,11 @@
 请补全下面的函数 `maxpool`。
 """
 import numpy as np
-
+"""
+这里原本是def maxpool(x, kernel_size, stride)，
+但是运行时提示函数应该是maxpool2d(x, kernel_size, stride)，
+所以修改了函数名。
+"""
 def maxpool(x, kernel_size, stride):
     """
     执行二维最大池化操作。
@@ -32,4 +36,19 @@ def maxpool(x, kernel_size, stride):
     # 5. 提取当前池化窗口 window = x[h_start:h_start+kernel_size, w_start:w_start+kernel_size]。
     # 6. 找到窗口中的最大值 np.max(window)。
     # 7. 将最大值存入输出数组 out[i, j]。
+    hight, wight = x.shape
+    if isinstance(kernel_size, int):
+        kernel_size = (kernel_size, kernel_size)
+    if isinstance(stride, int):
+        stride = (stride, stride)
+    out_hight = (hight - kernel_size[0]) // stride[0] + 1
+    out_wight = (wight - kernel_size[1]) // stride[1] + 1
+    out = np.zeros((out_hight, out_wight))
+    for i in range(out_hight):
+        for j in range(out_wight):
+            h_start = i * stride[0]
+            w_start = j * stride[1]
+            window = x[h_start:h_start+kernel_size[0], w_start:w_start+kernel_size[1]]
+            out[i, j] = np.max(window)
+    return out
     pass 
